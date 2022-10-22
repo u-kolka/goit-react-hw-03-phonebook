@@ -16,6 +16,21 @@ class App extends React.Component {
     filter: ''
   };
 
+    componentDidMount() {
+    const contacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(contacts);
+    
+    if (parsedContacts) {
+      this.setState({contacts: parsedContacts})
+    }
+  }
+
+  componentDidUpdate(prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
   addContact = newContact => {
     newContact.id = nanoid(7);
     for (const contact of this.state.contacts) {
@@ -47,22 +62,6 @@ class App extends React.Component {
 
     return contacts.filter(contact => contact.name.toLowerCase().includes(normalizedFilter));
   }
-
-  componentDidMount() {
-    const contacts = localStorage.getItem('contacts');
-    const parsedContacts = JSON.parse(contacts);
-    
-    if (parsedContacts) {
-      this.setState({contacts: parsedContacts})
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.contacts !== prevState.contacts) {
-      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-    }
-  }
-
 
   render() {
 
